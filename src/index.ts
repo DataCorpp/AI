@@ -20,7 +20,13 @@ if (!fs.existsSync(logsDir)) {
 }
 
 // Middleware
-app.use(cors());
+if (config.nodeEnv === 'development') {
+  app.use(cors()); // allow all in dev
+} else {
+  // In production, CORS will be handled at Nginx
+  // but still allow preflight passthrough for health check if needed
+}
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
